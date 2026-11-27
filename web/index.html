@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Internship outreach · Send Email</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#main"><span class="brand-icon" aria-hidden="true"></span>Send Email</a>
+      <span id="connection" class="connection" hidden></span>
+    </div>
+  </header>
+  <main class="shell" id="main">
+    <div class="intro">
+      <h1>Internship outreach</h1>
+      <p>Send a personal introduction and your résumé to each company, one email at a time.</p>
+    </div>
+    <section class="panel launch-help" id="launch-help" aria-labelledby="launch-title" hidden>
+      <h2 id="launch-title">Start Send Email on Windows</h2>
+      <p>Double-click <strong>Start Send Email.cmd</strong> in the Send Email folder and keep its window open. It will open the app in your browser.</p>
+      <a class="primary launch-link" href="http://127.0.0.1:8765/">Open the running app</a>
+    </section>
+    <nav class="section-nav" aria-label="Outreach steps" data-app-only>
+      <a href="#recipients">Recipients</a>
+      <a href="#message">Message</a>
+      <a href="#sending">Review and send</a>
+      <a href="#progress">Progress</a>
+    </nav>
+    <section id="gmail" class="panel account-panel" aria-labelledby="gmail-heading" hidden>
+      <div class="panel-heading">
+        <div>
+          <h2 id="gmail-heading">Gmail account</h2>
+          <p id="gmail-status" class="help" role="status"></p>
+        </div>
+        <div class="account-actions">
+          <a id="google-start" class="primary launch-link" href="https://console.cloud.google.com/auth/overview/personal?clientType=desktop" target="_blank" rel="noopener noreferrer" hidden>Set up Gmail</a>
+          <a id="google-api" href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noopener noreferrer" hidden>Enable Gmail API</a>
+          <a id="google-login" class="primary launch-link" href="/oauth/google/start" target="_blank" rel="noopener" hidden>Sign in with Google</a>
+          <button id="google-logout" class="secondary" type="button" hidden>Sign out</button>
+        </div>
+      </div>
+      <p id="google-login-feedback" class="feedback" role="status"></p>
+      <a id="google-continue" href="#" target="_blank" rel="noopener noreferrer" hidden>Continue to Google</a>
+      <details id="google-setup" hidden>
+        <summary id="google-setup-title">Import Google setup file</summary>
+        <p id="google-setup-instructions">In Google’s setup tab, select or create a project, choose <strong>Desktop app</strong>, and click <strong>Download JSON</strong> after creating the client. Then choose that file here.</p>
+        <p id="google-replace-instructions" hidden>Choose a file here to replace the saved setup.</p>
+        <div class="file-field">
+          <label for="google-credentials">Downloaded JSON file</label>
+          <input id="google-credentials" type="file" accept=".json,application/json">
+        </div>
+        <p id="google-feedback" class="feedback" role="status"></p>
+      </details>
+    </section>
+    <div class="headline-status" id="global-notice" role="status"></div>
+    <div class="workspace" data-app-only>
+      <div class="prepare">
+        <section class="panel" id="recipients" aria-labelledby="recipients-heading">
+          <div class="panel-heading">
+            <h2 id="recipients-heading">Recipients</h2>
+            <a href="/sample-contacts.csv">Download sample CSV</a>
+          </div>
+          <p>Use an <code>email</code> column and optional <code>company</code> and <code>contact_name</code> columns.</p>
+          <div class="file-field">
+            <label for="csv">Company email list</label>
+            <input id="csv" type="file" accept=".csv,text/csv">
+          </div>
+          <p id="import-status" class="feedback" role="status"></p>
+          <details id="skipped" hidden>
+            <summary id="skipped-summary">Review skipped rows</summary>
+            <ul id="skipped-list"></ul>
+            <div class="pagination" id="skip-pagination">
+              <button id="skip-prev" type="button" class="secondary">Previous</button>
+              <span id="skip-page"></span>
+              <button id="skip-next" type="button" class="secondary">Next</button>
+            </div>
+          </details>
+        </section>
+
+        <section class="panel" id="message" aria-labelledby="message-heading">
+          <h2 id="message-heading">Message</h2>
+          <p>Fill in your details to create a draft, or write directly in the editor.</p>
+          <details id="profile-details">
+            <summary>Draft from my details</summary>
+            <form id="profile">
+              <div class="fields">
+                <label>Full name<input name="name" maxlength="100" required></label>
+                <label>Course<input name="course" maxlength="120" required></label>
+                <label>University<input name="university" maxlength="160" required></label>
+                <label>Internship field<input name="field" maxlength="120" required></label>
+                <label>Availability <span>(optional)</span><input name="availability" maxlength="160" placeholder="e.g. June to August 2027"></label>
+                <label>Skills or projects <span>(optional)</span><input name="skills" maxlength="400"></label>
+                <label>Phone <span>(optional)</span><input name="phone" type="tel" maxlength="60"></label>
+                <label>LinkedIn or portfolio <span>(optional)</span><input name="portfolio" maxlength="240"></label>
+              </div>
+              <button type="submit" class="secondary">Create draft</button>
+            </form>
+          </details>
+          <label class="field">Subject<input id="subject" maxlength="240" value="Internship inquiry"></label>
+          <label class="field">Email body<textarea id="body" rows="10" maxlength="20000" placeholder="Introduce yourself and ask about internship opportunities."></textarea></label>
+          <p class="help">Personalize with <code>{{greeting}}</code>, <code>{{company}}</code>, <code>{{contact_name}}</code>, or <code>{{email}}</code>. A missing name becomes “Hiring Team”.</p>
+          <div class="file-field">
+            <label for="resume">Résumé PDF</label>
+            <input id="resume" type="file" accept=".pdf,application/pdf" aria-describedby="resume-hint">
+            <span id="resume-hint" class="help">One PDF, up to 10 MB, attached to every email.</span>
+          </div>
+          <p id="resume-status" class="feedback" role="status"></p>
+        </section>
+      </div>
+
+      <div class="review">
+        <section class="panel" id="sending" aria-labelledby="sending-heading">
+          <h2 id="sending-heading">Review and send</h2>
+          <div class="preview-controls">
+            <label for="contact-index">Preview recipient</label>
+            <div class="pagination">
+              <button id="preview-prev" type="button" class="secondary" aria-label="Previous recipient" disabled>Previous</button>
+              <input id="contact-index" type="number" min="1" value="1" aria-label="Recipient number" disabled>
+              <span id="preview-total">of 0</span>
+              <button id="preview-next" type="button" class="secondary" aria-label="Next recipient" disabled>Next</button>
+            </div>
+          </div>
+          <div class="email-preview">
+            <dl>
+              <div><dt>To</dt><dd id="preview-address">Example recipient</dd></div>
+              <div><dt>Subject</dt><dd id="preview-subject">Internship inquiry</dd></div>
+              <div><dt>Attachment</dt><dd id="preview-attachment">Add your résumé PDF</dd></div>
+            </dl>
+            <div class="preview-body" id="preview-body">Your email preview will appear here.</div>
+          </div>
+          <div class="test-controls">
+            <label for="test-to">Your email address for testing</label>
+            <div class="test-row">
+              <input id="test-to" type="email" placeholder="you@example.com">
+              <button id="test" type="button" class="secondary" disabled>Send test</button>
+            </div>
+          </div>
+          <div class="send-controls">
+            <label class="field" for="delay">Seconds between emails
+              <input id="delay" type="number" value="30" min="1" max="86400" step="1" required>
+            </label>
+            <p class="help">Set a delay that fits your email provider’s sending limits.</p>
+            <label class="checkbox"><input id="dry" type="checkbox" checked> Dry run <span>(no emails sent)</span></label>
+            <button id="run" type="button" class="primary" disabled>Check batch</button>
+            <p id="send-status" class="feedback" role="status"></p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section class="panel progress" id="progress" aria-labelledby="progress-heading" data-app-only>
+      <div class="panel-heading">
+        <h2 id="progress-heading">Sending progress</h2>
+        <a id="export" href="/api/results" hidden>Download results CSV</a>
+      </div>
+      <p id="current-state" role="status">No batch started.</p>
+      <p id="campaign-details" class="help" hidden></p>
+      <div id="batch-progress" hidden>
+        <dl class="counts" id="counts">
+          <div><dt>Queued</dt><dd id="count-queued">0</dd></div>
+          <div><dt>Sending</dt><dd id="count-sending">0</dd></div>
+          <div><dt>Accepted</dt><dd id="count-accepted">0</dd></div>
+          <div><dt>Failed</dt><dd id="count-failed">0</dd></div>
+          <div><dt>Needs review</dt><dd id="count-review">0</dd></div>
+          <div><dt>Skipped</dt><dd id="count-skipped">0</dd></div>
+        </dl>
+        <p class="help">Accepted means your email provider took the message for delivery. Check messages that need review with your provider before trying again.</p>
+        <div class="batch-controls">
+          <button id="pause" type="button" class="secondary" hidden>Pause batch</button>
+          <button id="resume-batch" type="button" class="primary" hidden>Resume batch</button>
+        </div>
+        <div class="table-scroll" role="region" aria-label="Recipient results" tabindex="0">
+          <table aria-label="Recipient results">
+            <thead><tr><th scope="col">Row</th><th scope="col">Email</th><th scope="col">Status</th><th scope="col">Details</th></tr></thead>
+            <tbody id="result-rows"></tbody>
+          </table>
+        </div>
+        <div class="pagination results-pagination">
+          <button id="results-prev" type="button" class="secondary">Previous</button>
+          <span id="results-page"></span>
+          <button id="results-next" type="button" class="secondary">Next</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <dialog id="confirm" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Start sending emails?</h2>
+    <p id="confirm-copy"></p>
+    <div class="dialog-actions">
+      <button id="confirm-cancel" type="button" class="secondary" autofocus>Cancel</button>
+      <button id="confirm-start" type="button" class="primary">Start batch</button>
+    </div>
+  </dialog>
+</body>
+</html>
